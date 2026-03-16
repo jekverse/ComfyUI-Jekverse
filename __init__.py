@@ -11,11 +11,6 @@ import time
 import subprocess
 import threading
 import signal
-import pty
-import select
-import fcntl
-import termios
-import struct
 from urllib.parse import urlparse, unquote
 from datetime import datetime
 from aiohttp import web
@@ -873,4 +868,4 @@ async def files_mkdir(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
-print("[Downloader] Loaded - aria2 powered + terminal + file manager")
+print("[Jekverse] ComfyUI-Jekverse Extension Loaded - Powered by aria2 + File Manager")
