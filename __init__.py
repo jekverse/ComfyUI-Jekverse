@@ -77,12 +77,22 @@ def get_model_directories():
         "text_encoders": os.path.join(models, "text_encoders"),
         "loras": os.path.join(models, "loras"),
         "vae": os.path.join(models, "vae"),
+        "vae_approx": os.path.join(models, "vae_approx"),
         "clip": os.path.join(models, "clip"),
         "clip_vision": os.path.join(models, "clip_vision"),
         "checkpoints": os.path.join(models, "checkpoints"),
         "upscale_models": os.path.join(models, "upscale_models"),
+        "latent_upscale_models": os.path.join(models, "latent_upscale_models"),
         "controlnet": os.path.join(models, "controlnet"),
         "embeddings": os.path.join(models, "embeddings"),
+        "diffusers": os.path.join(models, "diffusers"),
+        "gligen": os.path.join(models, "gligen"),
+        "hypernetworks": os.path.join(models, "hypernetworks"),
+        "model_patches": os.path.join(models, "model_patches"),
+        "photomaker": os.path.join(models, "photomaker"),
+        "style_models": os.path.join(models, "style_models"),
+        "unet": os.path.join(models, "unet"),
+        "audio_encoders": os.path.join(models, "audio_encoders"),
     }
 
 def add_log(message, level="info"):
