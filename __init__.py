@@ -71,7 +71,7 @@ def detect_platform(url):
 def get_model_directories():
     # base = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     # models = os.path.join(base, "models")
-    models = "/root/volume/ComfyUI/models"
+    models = "/root/ComfyUI/models"
     return {
         "diffusion_models": os.path.join(models, "diffusion_models"),
         "text_encoders": os.path.join(models, "text_encoders"),
@@ -710,7 +710,7 @@ async def api_save_template(request):
 # FILE MANAGER
 # =============================================
 
-FILE_MANAGER_ROOT = os.path.realpath("/root/volume/ComfyUI")
+FILE_MANAGER_ROOT = os.path.realpath("/root/ComfyUI")
 
 def safe_path(requested_path):
     """Resolve and validate path is within FILE_MANAGER_ROOT."""
@@ -733,7 +733,13 @@ async def files_list(request):
 
         items = []
         try:
-            entries = sorted(os.listdir(target), key=lambda x: (not os.path.isdir(os.path.join(target, x)), x.lower()))
+            entries = os.listdir(target)
+            # Filter entries if at the root level of FILE_MANAGER_ROOT
+            if target == os.path.realpath(FILE_MANAGER_ROOT):
+                allowed = ["models", "input", "output", "user"]
+                entries = [e for e in entries if e in allowed]
+            
+            entries = sorted(entries, key=lambda x: (not os.path.isdir(os.path.join(target, x)), x.lower()))
         except PermissionError:
             return web.json_response({"error": "Permission denied"}, status=403)
 
