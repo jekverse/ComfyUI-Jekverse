@@ -139,13 +139,10 @@ class VideoMerger:
             else:
                 logger.warning(f"[Jekverse] Video slot {idx + 1} tidak valid atau file tidak ditemukan, dilewati.")
 
-        if len(video_paths) == 0:
-            raise ValueError("[Jekverse Video Merger] Tidak ada input video yang valid untuk digabungkan.")
-
-        if len(video_paths) == 1:
-            # If only 1 video provided, return it directly
-            output_path = video_paths[0]
-            return (self._wrap_video(output_path),)
+        if len(video_paths) < 2:
+            raise ValueError(
+                f"[Jekverse Video Merger] Dibutuhkan minimal 2 video yang valid untuk digabungkan, tetapi hanya terdeteksi {len(video_paths)} video."
+            )
 
         output_path = os.path.join(session_dir, f"merged_{uuid.uuid4().hex}.mp4")
 

@@ -141,5 +141,95 @@ app.registerExtension({
                 adjustVideoInputs(this);
             };
         }
+
+        // =====================================================================
+        // 3. Dynamic auto-growing sockets for Text Index Switch (MiniMax H3 style)
+        // =====================================================================
+        if (
+            nodeData.name === "jekverse textIndexSwitch" ||
+            nodeData.name === "easy textIndexSwitch" ||
+            nodeData.name === "Text Index Switch"
+        ) {
+            const MAX_TEXTS = 20;
+
+            function adjustTextInputs(node) {
+                if (!node.inputs) return;
+
+                // Find highest connected text index (1..20)
+                let highestConnected = 0;
+                for (let i = 0; i < node.inputs.length; i++) {
+                    const input = node.inputs[i];
+                    const match = input.name && input.name.match(/^text(\d+)$/);
+                    if (match) {
+                        const num = parseInt(match[1], 10);
+                        if (input.link != null) {
+                            if (num > highestConnected) {
+                                highestConnected = num;
+                            }
+                        }
+                    }
+                }
+
+                // Desired slot count: at least 2 (text1 and text2), and 1 empty slot after the highest connected, max 20
+                const targetCount = Math.max(2, Math.min(MAX_TEXTS, highestConnected + 1));
+
+                // 1. Remove excess unconnected text inputs from the end
+                for (let num = MAX_TEXTS; num > targetCount; num--) {
+                    const idx = node.inputs.findIndex((inp) => inp.name === `text${num}`);
+                    if (idx !== -1 && node.inputs[idx].link == null) {
+                        node.removeInput(idx);
+                    }
+                }
+
+                // 2. Add missing text inputs up to targetCount (before the 'index' socket)
+                for (let num = 1; num <= targetCount; num++) {
+                    const name = `text${num}`;
+                    const existing = node.inputs.find((inp) => inp.name === name);
+                    if (!existing) {
+                        const indexPos = node.inputs.findIndex((inp) => inp.name === "index");
+                        if (indexPos !== -1) {
+                            node.addInput(name, "STRING");
+                            const lastAdded = node.inputs.pop();
+                            node.inputs.splice(indexPos, 0, lastAdded);
+                        } else {
+                            node.addInput(name, "STRING");
+                        }
+                    }
+                }
+
+                // Recompute node display size nicely
+                requestAnimationFrame(() => {
+                    if (node.computeSize) {
+                        const sz = node.computeSize();
+                        if (node.setSize) {
+                            node.setSize([Math.max(sz[0], node.size[0]), Math.max(sz[1], node.size[1])]);
+                        }
+                    }
+                    if (app.graph) {
+                        app.graph.setDirtyCanvas(true, true);
+                    }
+                });
+            }
+
+            const onNodeCreated = nodeType.prototype.onNodeCreated;
+            nodeType.prototype.onNodeCreated = function () {
+                onNodeCreated?.apply(this, arguments);
+                adjustTextInputs(this);
+            };
+
+            const onConnectionsChange = nodeType.prototype.onConnectionsChange;
+            nodeType.prototype.onConnectionsChange = function (type, slotIndex, isConnected, link_info, ioSlot) {
+                onConnectionsChange?.apply(this, arguments);
+                if (type === 1) {
+                    adjustTextInputs(this);
+                }
+            };
+
+            const onConfigure = nodeType.prototype.onConfigure;
+            nodeType.prototype.onConfigure = function () {
+                onConfigure?.apply(this, arguments);
+                adjustTextInputs(this);
+            };
+        }
     }
 });

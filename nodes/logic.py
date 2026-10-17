@@ -48,11 +48,11 @@ class textIndexSwitch:
     @classmethod
     def INPUT_TYPES(s):
         optional = {}
-        for i in range(s.MAX_FLOW_NUM):
+        for i in range(1, s.MAX_FLOW_NUM + 1):
             optional[f"text{i}"] = ("STRING", {"forceInput": True, "lazy": True})
         return {
             "required": {
-                "index": ("INT", {"default": 0, "min": 0, "max": s.MAX_FLOW_NUM - 1, "step": 1}),
+                "index": ("INT", {"default": 1, "min": 1, "max": s.MAX_FLOW_NUM, "step": 1}),
             },
             "optional": optional,
         }
@@ -63,13 +63,20 @@ class textIndexSwitch:
     CATEGORY = "Jekverse/Logic/Index Switch"
 
     def check_lazy_status(self, index, **kwargs):
+        # 1-based indexing with fallback for legacy text0
         key = f"text{index}"
+        if key not in kwargs and f"text{index - 1}" in kwargs:
+            key = f"text{index - 1}"
         if kwargs.get(key, None) is None:
             return [key]
         return []
 
     def execute(self, index, **kwargs):
-        val = kwargs.get(f"text{index}", "")
+        # 1-based indexing with fallback for legacy text0
+        key = f"text{index}"
+        if key not in kwargs and f"text{index - 1}" in kwargs:
+            key = f"text{index - 1}"
+        val = kwargs.get(key, "")
         return (val if val is not None else "",)
 
 
