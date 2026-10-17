@@ -16,9 +16,10 @@ from datetime import datetime
 from aiohttp import web
 from server import PromptServer
 
+from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+
 WEB_DIRECTORY = "./web/js"
-NODE_CLASS_MAPPINGS = {}
-__all__ = ["WEB_DIRECTORY"]
+__all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]
 
 # =============================================
 # CONFIGURATION
