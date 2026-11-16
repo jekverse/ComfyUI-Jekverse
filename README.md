@@ -49,3 +49,17 @@ This project is licensed under the MIT License.
 
 ---
 *Developed with ❤️ for the ComfyUI Community by Jekverse.*
+
+## H3 Dual-Space Bridge
+
+`Jekverse Save H3 Conditioning` and `Jekverse Load H3 Conditioning` transfer H3
+conditioning between ComfyUI Spaces through a `comfyui_h3_conditioning_v2`
+safetensors file. The file preserves conditioning embeddings, MiniMax token
+tags, optional pooled output, keyframe latents, and width, height, and frame
+length metadata. It stores tensors and JSON metadata and does not use Python
+pickle serialization.
+
+End the Conditioner workflow with the Save node. Start the Generator workflow
+with the Load node, then connect its outputs to the generator conditioning and
+canvas inputs. JekSpace Comfy2API generates both Space applications and wires
+the selected workflow node IDs and fields.
