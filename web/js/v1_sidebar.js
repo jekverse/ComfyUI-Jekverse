@@ -1,5 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
+import { createComfy2ApiPanel } from "./comfy2api_panel.js";
 
 // Global state - persists across tab open/close
 let globalState = {
@@ -65,6 +66,11 @@ app.registerExtension({
                     tab2.textContent = 'Files';
                     tabBar.appendChild(tab2);
 
+                    const tab3 = document.createElement('button');
+                    tab3.className = 'dl-tab-btn';
+                    tab3.textContent = 'Comfy2API';
+                    tabBar.appendChild(tab3);
+
                     // Content 1: Model Downloader
                     const content1 = document.createElement('div');
                     content1.className = 'dl-tab-content active';
@@ -82,8 +88,15 @@ app.registerExtension({
                     content2.style.overflow = 'hidden';
                     el.appendChild(content2);
 
-                    const allTabs = [tab1, tab2];
-                    const allContents = [content1, content2];
+                    // Content 3: Comfy2API monospace configurator
+                    const content3 = document.createElement('div');
+                    content3.className = 'dl-tab-content';
+                    content3.style.overflow = 'hidden';
+                    content3.appendChild(createComfy2ApiPanel());
+                    el.appendChild(content3);
+
+                    const allTabs = [tab1, tab2, tab3];
+                    const allContents = [content1, content2, content3];
 
                     function switchTab(index) {
                         allTabs.forEach((t, i) => {
@@ -98,6 +111,7 @@ app.registerExtension({
                         switchTab(1);
                         initFileManager(content2);
                     };
+                    tab3.onclick = () => switchTab(2);
 
                     // Load state from server
                     loadState();

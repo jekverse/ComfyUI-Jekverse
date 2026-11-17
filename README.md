@@ -20,6 +20,13 @@ A powerful, all-in-one sidebar extension for ComfyUI that combines a high-perfor
 - Perform file operations: **Rename**, **Delete**, **Copy**, and **Move** items without leaving ComfyUI.
 - Clean and modern UI integrated seamlessly into the ComfyUI sidebar.
 
+### 🧩 Comfy2API Configurator
+- Configure a monospace JekSpace project from the active ComfyUI workflow in the sidebar.
+- Search workflow nodes, expose selected unconnected inputs as payload fields, and choose the output node.
+- Enter model download URLs, ComfyUI model folders, and custom-node repository URLs explicitly.
+- Download a versioned manifest and the matching ComfyUI API-format workflow for the JekSpace Comfy2API MCP.
+- DualSpace setup and workflow splitting are not supported by this configurator yet.
+
 ## 🚀 Installation
 
 ### 1. Clone the repository
